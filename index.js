@@ -17,6 +17,8 @@ if (environment) {
   app.use(express.static(path.join(__dirname, "Client/build")));
 }*/
 
+app.use(express.static(path.join(__dirname, "Client/build")));
+
 app.get("/", (req, res) => {
   res.send("Main Route");
 });
