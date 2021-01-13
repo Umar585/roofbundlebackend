@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
 
+require("dotenv").config();
+
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Main Route");
 });
 
-const port = 5000;
+//mailchimp
+app.use("/api/mailchimp", require("./routes/MailChimp/mailchimp"));
+
+const port = process.env.PORT || 5000;
 app.listen(port, console.log(`Listing on port ${port}`));
