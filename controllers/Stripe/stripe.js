@@ -1,3 +1,4 @@
+const path = require("path");
 //env file
 require("dotenv").config();
 //Stripe
@@ -12,7 +13,6 @@ const currentYear = newDate.getFullYear();
 
 exports.stripe = async (req, res) => {
   const { id, amount, email, address, company, phone, country } = req.body;
-
   try {
     const payment = await stripe.paymentIntents.create({
       amount,
@@ -30,13 +30,14 @@ exports.stripe = async (req, res) => {
         user: process.env.AWS_USER,
         pass: process.env.AWS_PASS,
       },
+      secure: true,
       debug: true,
     });
 
     //Sending Email to Customer
     let mailOptions = {
       from: "Roofbundle Reports <reports@roofbundle.com>",
-      to: "techdeveloper585@gmail.com",
+      to: email,
       subject: "RoofBundle Report",
       html:
         '<div style="max-width: 500px; text-align: center; display: block; margin-left: auto; margin-right: auto;">' +
@@ -59,22 +60,22 @@ exports.stripe = async (req, res) => {
       attachments: [
         {
           filename: "Logo.png",
-          path: path.join(__dirname, "client/build/Logo/Logo.png"),
+          path: path.join(__dirname, "imgs/Logo.png"),
           cid: "unique@kreata.ee",
         },
         {
           filename: "facebook.png",
-          path: path.join(__dirname, "client/build/Logo/facebook.png"),
+          path: path.join(__dirname, "imgs/facebook.png"),
           cid: "unique@fb.ee",
         },
         {
           filename: "instagram.png",
-          path: path.join(__dirname, "client/build/Logo/instagram.png"),
+          path: path.join(__dirname, "imgs/instagram.png"),
           cid: "unique@insta.ee",
         },
         {
           filename: "twitter.png",
-          path: path.join(__dirname, "client/build/Logo/twitter.png"),
+          path: path.join(__dirname, "imgs/twitter.png"),
           cid: "unique@twitter.ee",
         },
       ],
@@ -119,5 +120,9 @@ exports.stripe = async (req, res) => {
     return res.status(200).json({
       confirm: "Payment_Success",
     });
-  } catch (err) {}
+  } catch (err) {
+    return res.status(200).json({
+      confirm: "Payment_Failed",
+    });
+  }
 };
