@@ -8,9 +8,6 @@ const list_id = process.env.LIST_ID;
 const mchimp = new mailChimp(mc_api_key);
 
 exports.mailchimp = (req, res) => {
-  /*res.json({
-    names: ["Umar", "Rabiya", "Adam"],
-  });*/
   mchimp
     .post(`/lists/${list_id}/members/`, {
       email_address: req.query.email,

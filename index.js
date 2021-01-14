@@ -11,20 +11,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-/*checking if the project is in production mode
-const environment = process.env.NODE_ENV || "development";
-if (environment) {
-  app.use(express.static(path.join(__dirname, "Client/build")));
-}*/
-
-app.use(express.static(path.join(__dirname, "Client/build")));
-
 app.get("/", (req, res) => {
   res.send("Main Route");
 });
 
-//mailchimp
+//routes
 app.use("/api/mailchimp", require("./routes/MailChimp/mailchimp"));
+app.use("/api/stripe", require("./routes/Stripe/stripe"));
 
 const port = process.env.PORT || 5000;
 app.listen(port, console.log(`Listing on port ${port}`));
+
+/* UN_COMMENT BEFORE UPLOADING TO AWS ****IMPORTANT****
+app.use(express.static(path.join(__dirname, "client/build")));
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});*/
