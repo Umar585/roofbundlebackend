@@ -1,30 +1,38 @@
+//variables
 const express = require("express");
 const app = express();
-const path = require("path");
-//cors for policy
 const cors = require("cors");
-
 require("dotenv").config();
+const port = process.env.PORT || 5000;
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
-//use cases for app to use
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+//auth routes
+const authRoutes = require("./routes/Auth");
+const { db } = require("./models/User");
 
+//Main Route
 app.get("/", (req, res) => {
   res.send("Main Route");
 });
-
 //routes
-app.use("/api/mailchimp", require("./routes/MailChimp/mailchimp"));
-app.use("/api/stripe", require("./routes/Stripe/stripe"));
+app.use("/api/price", require("./routes/Price/Price"));
+app.use("/api/auth", authRoutes);
 
-const port = process.env.PORT || 5000;
+// db
+mongoose
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("DB Connected"));
+
+//middlewares
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+//listing to port
 app.listen(port, console.log(`Listing on port ${port}`));
-
-/* UN_COMMENT BEFORE UPLOADING TO AWS ****IMPORTANT****
-app.use(express.static(path.join(__dirname, "client/build")));
-
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});*/
