@@ -41,6 +41,11 @@ exports.signup = async (req, res, next) => {
       subject: "Password Reset Request",
       text: message,
     });
+
+    res.status(201).json({
+      success: true,
+      data: "Signup Success",
+    });
     sendToken(user, 201, res);
   } catch (error) {
     next(error);
@@ -96,7 +101,7 @@ exports.signin = async (req, res, next) => {
       return next(new ErrorResponse("Email not verified", 401));
     }
 
-    sendToken(user, 200, res);
+    sendToken(user, 200, res, user.email);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -187,7 +192,7 @@ exports.resetpassword = async (req, res, next) => {
   }
 };
 
-const sendToken = (user, statusCode, res) => {
+const sendToken = (user, statusCode, res, email) => {
   const token = user.getSignedToken();
-  res.status(statusCode).json({ success: true, token });
+  res.status(statusCode).json({ success: true, token, email: email });
 };

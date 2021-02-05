@@ -1,3 +1,8 @@
+exports.getPrice = (req, res) => {
+  let jsonData = require("./Data.json");
+  res.send(jsonData);
+};
+
 exports.updatePrice = (req, res) => {
   const fs = require("fs");
   const path = require("path");

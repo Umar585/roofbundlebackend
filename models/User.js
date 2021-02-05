@@ -12,7 +12,7 @@ let userSchema = new Schema(
     },
     lname: {
       type: String,
-      required: [true, "fnalnameme required"],
+      required: [true, "lname required"],
     },
     email: {
       type: String,

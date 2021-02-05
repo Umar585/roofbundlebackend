@@ -15,16 +15,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //auth routes
+const priceRoute = require("./routes/Price/Price");
 const authRoutes = require("./routes/Auth");
-const { db } = require("./models/User");
+const CustomerRoutes = require("./routes/Customer/Customer");
 
 //Main Route
 app.get("/", (req, res) => {
   res.send("Main Route");
 });
 //routes
-app.use("/api/price", require("./routes/Price/Price"));
+app.use("/api/price", priceRoute);
 app.use("/api/auth", authRoutes);
+app.use("/api/customer", CustomerRoutes);
 app.use("/api/private", require("./routes/private"));
 
 //Error Handle should be at the end
