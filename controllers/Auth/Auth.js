@@ -22,6 +22,7 @@ exports.signup = async (req, res, next) => {
     const user = await User.create({
       fname,
       lname,
+      passToken: crypto.randomBytes(20).toString("hex"),
       email,
       password,
       password_confirmation,
@@ -101,7 +102,7 @@ exports.signin = async (req, res, next) => {
       return next(new ErrorResponse("Email not verified", 401));
     }
 
-    sendToken(user, 200, res, user.email);
+    sendToken(user, 200, res, user.email, user.passToken);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -192,7 +193,9 @@ exports.resetpassword = async (req, res, next) => {
   }
 };
 
-const sendToken = (user, statusCode, res, email) => {
+const sendToken = (user, statusCode, res, email, verificationToken) => {
   const token = user.getSignedToken();
-  res.status(statusCode).json({ success: true, token, email: email });
+  res
+    .status(statusCode)
+    .json({ success: true, token, email: email, verify: verificationToken });
 };

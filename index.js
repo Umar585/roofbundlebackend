@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const priceRoute = require("./routes/Price/Price");
 const authRoutes = require("./routes/Auth");
 const CustomerRoutes = require("./routes/Customer/Customer");
+const AlbumRoutes = require("./routes/Album/Album");
 
 //Main Route
 app.get("/", (req, res) => {
@@ -28,6 +29,7 @@ app.use("/api/price", priceRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/customer", CustomerRoutes);
 app.use("/api/private", require("./routes/private"));
+app.use("/api/album", AlbumRoutes);
 
 //Error Handle should be at the end
 app.use(errorHandler);

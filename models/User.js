@@ -14,6 +14,9 @@ let userSchema = new Schema(
       type: String,
       required: [true, "lname required"],
     },
+    passToken: {
+      type: String,
+    },
     email: {
       type: String,
       required: [true, "email required"],

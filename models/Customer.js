@@ -40,6 +40,10 @@ let customerSchema = new Schema(
       type: String,
       required: [true, "lngs required"],
     },
+    process: {
+      type: String,
+      required: [true, "process required"],
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
