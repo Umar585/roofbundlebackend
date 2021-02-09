@@ -23,7 +23,7 @@ exports.AddUser = async (req, res, next) => {
       address: address,
       lats: lats,
       lngs: lngs,
-      process: "new",
+      process: "New",
       user: user._id,
     });
     await customer.save();
@@ -49,26 +49,25 @@ exports.AddNewUser = async (req, res, next) => {
     }
 
     const customer = await Customer.findById(id);
-    console.log(val);
     let newProccess;
     switch (val) {
-      case "new":
-        newProccess = "new";
+      case "New":
+        newProccess = "New";
         break;
-      case "quoted":
-        newProccess = "quoted";
+      case "Quoted":
+        newProccess = "Quoted";
         break;
-      case "signed":
-        newProccess = "signed";
+      case "Signed":
+        newProccess = "Signed";
         break;
-      case "inprogress":
-        newProccess = "inprogress";
+      case "Inprogress":
+        newProccess = "Inprogress";
         break;
-      case "complete":
-        newProccess = "complete";
+      case "Complete":
+        newProccess = "Complete";
         break;
-      case "invoiced":
-        newProccess = "invoiced";
+      case "Invoiced":
+        newProccess = "Invoiced";
         break;
     }
     customer.process = newProccess;
@@ -99,23 +98,23 @@ exports.GetUsers = async (req, res, next) => {
 
     let newProccess;
     switch (page) {
-      case "new":
-        newProccess = "new";
+      case "New":
+        newProccess = "New";
         break;
-      case "quoted":
-        newProccess = "quoted";
+      case "Quoted":
+        newProccess = "Quoted";
         break;
-      case "signed":
-        newProccess = "signed";
+      case "Signed":
+        newProccess = "Signed";
         break;
-      case "inprogress":
-        newProccess = "inprogress";
+      case "Inprogress":
+        newProccess = "Inprogress";
         break;
-      case "complete":
-        newProccess = "complete";
+      case "Complete":
+        newProccess = "Complete";
         break;
-      case "invoiced":
-        newProccess = "invoiced";
+      case "Invoiced":
+        newProccess = "Invoiced";
         break;
     }
 
