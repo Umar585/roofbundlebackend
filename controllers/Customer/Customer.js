@@ -15,12 +15,12 @@ exports.AddUser = async (req, res, next) => {
     }
 
     const customer = await Customer.create({
-      fname: form.fname.trim(),
-      lname: form.lname.trim(),
-      phone: form.phone.trim(),
-      email: form.email.trim(),
-      scope: form.scope.trim(),
-      address: address.trim(),
+      fname: form.fname,
+      lname: form.lname,
+      phone: form.phone,
+      email: form.email,
+      scope: form.scope,
+      address: address,
       lats: lats,
       lngs: lngs,
       process: "new",
@@ -177,14 +177,14 @@ exports.UpdateUser = async (req, res, next) => {
 
     const customer = await Customer.findByIdAndUpdate(id);
 
-    customer.fname = form.fname.trim();
-    customer.lname = form.lname.trim();
-    customer.phone = form.phone.trim();
-    customer.email = form.email.trim();
-    customer.scope = form.scope.trim();
-    customer.address = address.trim();
-    customer.lats = coords.lat.trim();
-    customer.lngs = coords.lng.trim();
+    customer.fname = form.fname;
+    customer.lname = form.lname;
+    customer.phone = form.phone;
+    customer.email = form.email;
+    customer.scope = form.scope;
+    customer.address = address;
+    customer.lats = coords.lat;
+    customer.lngs = coords.lng;
 
     customer.save();
 

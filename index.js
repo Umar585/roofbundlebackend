@@ -34,6 +34,7 @@ app.use("/api/album", AlbumRoutes);
 //Error Handle should be at the end
 app.use(errorHandler);
 // connecting to db
+
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,

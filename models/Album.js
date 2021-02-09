@@ -7,9 +7,8 @@ let albumSchema = new Schema(
       type: String,
       required: [true, "title required"],
     },
-    main_photo: {
-      data: Buffer,
-      contentType: String,
+    img: {
+      type: String,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
