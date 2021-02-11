@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 let photosSchema = new Schema(
   {
-    photo: {
-      type: Buffer,
+    name: {
+      type: String,
     },
     album: {
       type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +13,7 @@ let photosSchema = new Schema(
   },
   {
     timestamps: true,
-    collection: "album",
+    collection: "photos",
   }
 );
 

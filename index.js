@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 //auth routes
 const priceRoute = require("./routes/Price/Price");
@@ -30,7 +32,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/customer", CustomerRoutes);
 app.use("/api/private", require("./routes/private"));
 app.use("/api/album", AlbumRoutes);
-
 //Error Handle should be at the end
 app.use(errorHandler);
 // connecting to db

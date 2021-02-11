@@ -1,5 +1,6 @@
 const User = require("../../models/User");
 const Customer = require("../../models/Customer");
+const Album = require("../../models/Album");
 const ErrorResponse = require("../../Utils/ErrorResponse");
 
 //Adding new Users
@@ -133,7 +134,7 @@ exports.GetUsers = async (req, res, next) => {
 };
 //Getting Single Users
 exports.GetSingleUsers = async (req, res, next) => {
-  const { customerID, email, passToken } = req.body;
+  const { id, email, passToken } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -147,7 +148,7 @@ exports.GetSingleUsers = async (req, res, next) => {
       return next(new ErrorResponse("Email/Token Invalid", 401));
     }
 
-    const customer = await Customer.findById(customerID);
+    const customer = await Customer.findById(id);
 
     res.status(201).json({
       success: true,
@@ -197,8 +198,7 @@ exports.UpdateUser = async (req, res, next) => {
 };
 //Delete Users
 exports.DeleteUser = async (req, res, next) => {
-  const { customerID, email } = req.body;
-
+  const { id, email, passToken } = req.body;
   try {
     const user = await User.findOne({ email });
 
@@ -206,9 +206,16 @@ exports.DeleteUser = async (req, res, next) => {
     if (!user) {
       return next(new ErrorResponse("Email Invalid", 401));
     }
+    //checking if the passToken exists
+    if (user.passToken != passToken) {
+      return next(new ErrorResponse("Email/PassToken Invalid", 401));
+    }
 
-    const customer = await Customer.findByIdAndDelete(customerID);
-
+    const customer = await Customer.findByIdAndDelete(id);
+    const albumcustid = await Album.find({ user: id });
+    albumcustid.forEach(async (element) => {
+      const album = await Album.findByIdAndDelete(element._id);
+    });
     res.status(201).json({
       success: true,
     });
