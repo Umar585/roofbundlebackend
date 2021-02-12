@@ -16,7 +16,6 @@ const {
   DeleteAlbum,
   GetSinglePhoto,
 } = require("../../controllers/Album/Album");
-const { exit } = require("process");
 
 router.post("/addalbum", AddAlbum);
 router.post("/getalbum", GetAlbums);
