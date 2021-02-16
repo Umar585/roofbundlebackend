@@ -21,6 +21,7 @@ const priceRoute = require("./routes/Price/Price");
 const authRoutes = require("./routes/Auth");
 const CustomerRoutes = require("./routes/Customer/Customer");
 const AlbumRoutes = require("./routes/Album/Album");
+const DiagramRoutes = require("./routes/Diagrams/Diagrams");
 
 //Main Route
 app.get("/", (req, res) => {
@@ -32,6 +33,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/customer", CustomerRoutes);
 app.use("/api/private", require("./routes/private"));
 app.use("/api/album", AlbumRoutes);
+app.use("/api/diagrams", DiagramRoutes);
+app.use("/api/getuserinfo", require("./routes/getuserinfo"));
 //Error Handle should be at the end
 app.use(errorHandler);
 // connecting to db

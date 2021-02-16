@@ -12,6 +12,7 @@ const crypto = require("crypto");
 exports.AddAlbum = async (req, res, next) => {
   const { id, title, email, passToken } = req.body;
   const randNum = Math.floor(Math.random() * 6) + 1;
+
   try {
     const user = await User.findOne({ email });
 

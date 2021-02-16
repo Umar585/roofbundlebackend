@@ -1,27 +1,10 @@
-const express = require("express");
-const router = express.Router();
+const Diagrams = require("../../models/Diagrams");
+const User = require("../../models/User");
 const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 require("dotenv").config();
 const crypto = require("crypto");
-
-const User = require("../../models/User");
-const Photos = require("../../models/Photos");
-
-const {
-  AddAlbum,
-  GetAlbums,
-  GetAlbumsPhotos,
-  DeleteAlbum,
-  GetSinglePhoto,
-} = require("../../controllers/Album/Album");
-
-router.post("/addalbum", AddAlbum);
-router.post("/getalbum", GetAlbums);
-router.post("/getalbumphotos", GetAlbumsPhotos);
-router.post("/deletealbum", DeleteAlbum);
-router.post("/getsinglePhoto", GetSinglePhoto);
 
 const storage = multer.memoryStorage({
   destination: function (req, file, callback) {
@@ -38,8 +21,8 @@ const s3 = new aws.S3({
   Acl: "public-read",
 });
 
-router.post("/addalbumphoto", upload, async function (req, res, next) {
-  const { album_id, email, token } = req.headers;
+exports.AddDiagram = async (req, res, next) => {
+  const { user_id, email, token, diagram_title } = req.headers;
 
   try {
     const user = await User.findOne({ email });
@@ -48,10 +31,12 @@ router.post("/addalbumphoto", upload, async function (req, res, next) {
     if (!user) {
       return next(new ErrorResponse("Email Invalid", 401));
     }
+
     //checking if the email exists
     if (user.passToken != token) {
       return next(new ErrorResponse("PassToken Invalid", 401));
     }
+
     //if file is there
     if (req.files === null) {
       return res.status(400).json({ msg: "No file found" });
@@ -60,6 +45,7 @@ router.post("/addalbumphoto", upload, async function (req, res, next) {
     let fileName = req.files.image.name.split(".");
     const fileType = fileName[fileName.length - 1];
     const randKey = crypto.randomBytes(10).toString("hex");
+    const randNum = Math.floor(Math.random() * 6) + 1;
     if (
       fileType === "png" ||
       fileType == "jpg" ||
@@ -80,36 +66,63 @@ router.post("/addalbumphoto", upload, async function (req, res, next) {
           res.status(500).send(err);
         }
 
-        const photo = await Photos.create({
+        const diagrams = await Diagrams.create({
+          title: diagram_title,
+          img: randNum,
           name: data.Location,
-          album: album_id,
+          user: user_id,
         });
 
-        photo.save();
+        diagrams.save();
 
-        const photo_len = await Photos.find({
-          album: album_id,
+        const diagrams_len = await Diagrams.find({
+          user: user_id,
         }).countDocuments();
 
-        if (photo_len === 25) {
-          photo.delete();
-          return res.status(400).json({ msg: "Too many photos" });
+        if (diagrams_len === 5) {
+          diagrams.delete();
+          return res.status(400).json({ msg: "Too many diagrams" });
         }
 
         res.status(200).json({
-          file: data.Location,
+          Success: "Success",
         });
       });
-    } else {
-      return res.status(400).json({ msg: "Incorrect File Type" });
     }
   } catch (err) {
     next(err);
   }
-});
+};
 
-router.post("/deletealbumphoto", async function (req, res, next) {
-  const { photo_id, email, passToken } = req.body;
+exports.GetDiagrams = async (req, res, next) => {
+  const { id, email, passToken } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    //checking if the email exists
+    if (!user) {
+      return next(new ErrorResponse("Email Invalid", 401));
+    }
+    //checking if the email exists
+    if (user.passToken != passToken) {
+      return next(new ErrorResponse("PassToken Invalid", 401));
+    }
+
+    const diagrams = await Diagrams.find({ user: id });
+
+    res.status(201).json({
+      Success: "Success",
+      data: diagrams,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.DeleteDiagrams = async function (req, res, next) {
+  const { diagram_id, email, passToken } = req.body;
+
   try {
     const user = await User.findOne({ email });
     //checking if the email exists
@@ -121,8 +134,12 @@ router.post("/deletealbumphoto", async function (req, res, next) {
       return next(new ErrorResponse("PassToken Invalid", 401));
     }
 
-    const photo = await Photos.findById(photo_id);
-    const newName = photo.name.replace(
+    const diagram = await Diagrams.findByIdAndDelete(diagram_id);
+    /*
+    res.status(201).json({
+      Success: "Success",
+    });*/
+    const newName = diagram.name.replace(
       "https://roofbundlesecondbucket.s3.ca-central-1.amazonaws.com/",
       ""
     );
@@ -138,7 +155,7 @@ router.post("/deletealbumphoto", async function (req, res, next) {
         // an error occurred
       } else {
         try {
-          const deletePhoto = await Photos.findByIdAndDelete(photo_id);
+          const deleteDiagram = await Diagrams.findByIdAndDelete(diagram_id);
           res.status(201).json({
             success: true,
           });
@@ -150,6 +167,30 @@ router.post("/deletealbumphoto", async function (req, res, next) {
   } catch (err) {
     next(err);
   }
-});
+};
 
-module.exports = router;
+exports.GetSingleDiagram = async (req, res, next) => {
+  const { id, email, passToken } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    //checking if the email exists
+    if (!user) {
+      return next(new ErrorResponse("Email Invalid", 401));
+    }
+    //checking if the passToken and email exists
+    if (user.passToken != passToken) {
+      return next(new ErrorResponse("Email/Token Invalid", 401));
+    }
+    //const id = user._id;
+    const diagram = await Diagrams.findById(id);
+
+    res.status(201).json({
+      success: true,
+      data: diagram,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

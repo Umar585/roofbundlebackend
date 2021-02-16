@@ -195,7 +195,10 @@ exports.resetpassword = async (req, res, next) => {
 
 const sendToken = (user, statusCode, res, email, verificationToken) => {
   const token = user.getSignedToken();
-  res
-    .status(statusCode)
-    .json({ success: true, token, email: email, verify: verificationToken });
+  res.status(statusCode).json({
+    success: true,
+    token,
+    email: email,
+    verify: verificationToken,
+  });
 };
