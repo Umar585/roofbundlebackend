@@ -12,6 +12,12 @@ exports.updatePrice = (req, res) => {
     starterBundle: parseFloat(req.body.starterBundle),
     cappingBundle: parseFloat(req.body.cappingBundle),
     roofTopCost: parseFloat(req.body.roofTopCost),
+    iceWater: parseFloat(req.body.iceWater),
+    underLayment: parseFloat(req.body.underLayment),
+    dripEdge: parseFloat(req.body.dripEdge),
+    ridgeVent: parseFloat(req.body.ridgeVent),
+    roofVent: parseFloat(req.body.roofVent),
+    plumbingStackMat: parseFloat(req.body.plumbingStackMat),
     binCost: parseFloat(req.body.binCost),
   };
 
