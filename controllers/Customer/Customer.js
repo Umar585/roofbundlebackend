@@ -34,7 +34,8 @@ exports.AddUser = async (req, res, next) => {
       data: "Customer Success",
     });
   } catch (error) {
-    next(error);
+    //next(error);
+    res.status(500).json({ success: "Failed", error: error });
   }
 };
 //Changing new Users
