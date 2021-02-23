@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-let pricingSchema = new Schema(
+let materialsSchema = new Schema(
   {
     bundle: {
       type: String,
-      required: [true, "Chingle required"],
+      required: [true, "Bundle required"],
     },
     starterBundle: {
       type: String,
@@ -47,42 +47,6 @@ let pricingSchema = new Schema(
       type: String,
       required: [true, "Garbage Bin required"],
     },
-    iceWaterLabour: {
-      type: String,
-      required: [true, "Ice Water Labour required"],
-    },
-    dripEdgeLabour: {
-      type: String,
-      required: [true, "Drip Edge Labour required"],
-    },
-    ventLabour: {
-      type: String,
-      required: [true, "Vent Labour: required"],
-    },
-    ridgeVentLabour: {
-      type: String,
-      required: [true, "Ridge Vent Labour: required"],
-    },
-    plumbingStackMatLabour: {
-      type: String,
-      required: [true, "Plumbing Stack Mat Labour: required"],
-    },
-    underLaymentLabour: {
-      type: String,
-      required: [true, "Underlayment Labour: required"],
-    },
-    chimneyFlashingLabour: {
-      type: String,
-      required: [true, "Chimney Flashing Labour required"],
-    },
-    wallFlashingLabour: {
-      type: String,
-      required: [true, "Wall Flashing Labour required"],
-    },
-    satelliteLabour: {
-      type: String,
-      required: [true, "Satellite Labour required"],
-    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
@@ -90,8 +54,8 @@ let pricingSchema = new Schema(
   },
   {
     timestamps: true,
-    collection: "pricing",
+    collection: "materials",
   }
 );
 
-module.exports = mongoose.model("Pricing", pricingSchema);
+module.exports = mongoose.model("Materials", materialsSchema);
