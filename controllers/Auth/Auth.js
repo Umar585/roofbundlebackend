@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const Album = require("../../models/Album");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { createJWT } = require("../../Utils/Auth");

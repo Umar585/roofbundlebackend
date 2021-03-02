@@ -29,6 +29,14 @@ exports.AddUser = async (req, res, next) => {
     });
     await customer.save();
 
+    for (var i = 0; i < 5; i++) {
+      const album = await Album.create({
+        user: customer._id,
+      });
+
+      await album.save();
+    }
+
     res.status(201).json({
       success: true,
       data: "Customer Success",

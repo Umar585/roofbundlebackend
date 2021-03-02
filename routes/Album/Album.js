@@ -17,10 +17,10 @@ const {
   GetSinglePhoto,
 } = require("../../controllers/Album/Album");
 
-router.post("/addalbum", AddAlbum);
+//router.post("/addalbum", AddAlbum);
 router.post("/getalbum", GetAlbums);
 router.post("/getalbumphotos", GetAlbumsPhotos);
-router.post("/deletealbum", DeleteAlbum);
+//router.post("/deletealbum", DeleteAlbum);
 router.post("/getsinglePhoto", GetSinglePhoto);
 
 const storage = multer.memoryStorage({
@@ -28,6 +28,7 @@ const storage = multer.memoryStorage({
     callback(null, "");
   },
 });
+
 //const upload = multer({ storage }).single("image");
 const upload = multer({ storage }).single("image");
 
