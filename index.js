@@ -22,6 +22,7 @@ const authRoutes = require("./routes/Auth");
 const CustomerRoutes = require("./routes/Customer/Customer");
 const AlbumRoutes = require("./routes/Album/Album");
 const DiagramRoutes = require("./routes/Diagrams/Diagrams");
+const MeasureRoutes = require("./routes/Measurements/Measurements");
 
 //Main Route
 app.get("/", (req, res) => {
@@ -35,6 +36,7 @@ app.use("/api/private", require("./routes/private"));
 app.use("/api/album", AlbumRoutes);
 app.use("/api/diagrams", DiagramRoutes);
 app.use("/api/getuserinfo", require("./routes/getuserinfo"));
+app.use("/api/measure", MeasureRoutes);
 //Error Handle should be at the end
 app.use(errorHandler);
 // connecting to db

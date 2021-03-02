@@ -19,6 +19,10 @@ let materialsSchema = new Schema(
       type: String,
       required: [true, "Roof_Top Delivery required"],
     },
+    groundDropCost: {
+      type: String,
+      required: [true, "Ground Drop Cost required"],
+    },
     iceWater: {
       type: String,
       required: [true, "Ice and Water Shingle required"],

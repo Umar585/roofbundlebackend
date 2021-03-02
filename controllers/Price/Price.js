@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const Prices = require("../../models/Materials");
 const LabourPrices = require("../../models/Labour");
+const Profits = require("../../models/Profits");
 const ErrorResponse = require("../../Utils/ErrorResponse");
 
 exports.getMaterialsPrice = async (req, res, next) => {
@@ -26,6 +27,7 @@ exports.getMaterialsPrice = async (req, res, next) => {
       starterBundle: 0,
       cappingBundle: 0,
       roofTopCost: 0,
+      groundDropCost: 0,
       iceWater: 0,
       underLayment: 0,
       dripEdge: 0,
@@ -65,6 +67,7 @@ exports.updateMaterialsPrice = async (req, res, next) => {
   let setStarterBundle = setData(pricesData.starterBundle);
   let setCappingBundle = setData(pricesData.cappingBundle);
   let setRoofTopCost = setData(pricesData.roofTopCost);
+  let setGroundDropCost = setData(pricesData.groundDropCost);
   let setIceWater = setData(pricesData.iceWater);
   let setUnderLayment = setData(pricesData.underLayment);
   let setDripEdge = setData(pricesData.dripEdge);
@@ -94,6 +97,7 @@ exports.updateMaterialsPrice = async (req, res, next) => {
         (uPrice.starterBundle = setStarterBundle),
         (uPrice.cappingBundle = setCappingBundle),
         (uPrice.roofTopCost = setRoofTopCost),
+        (uPrice.groundDropCost = setGroundDropCost),
         (uPrice.iceWater = setIceWater),
         (uPrice.underLayment = setUnderLayment),
         (uPrice.dripEdge = setDripEdge),
@@ -113,6 +117,7 @@ exports.updateMaterialsPrice = async (req, res, next) => {
         starterBundle: setStarterBundle,
         cappingBundle: setCappingBundle,
         roofTopCost: setRoofTopCost,
+        groundDropCost: setGroundDropCost,
         iceWater: setIceWater,
         underLayment: setUnderLayment,
         dripEdge: setDripEdge,
@@ -239,6 +244,161 @@ exports.updateLaboursPrice = async (req, res, next) => {
         chimneyFlashingLabour: setChimneyFlashingLabour,
         wallFlashingLabour: setWallFlashingLabour,
         satelliteLabour: setSatelliteLabour,
+        user: user.id,
+      });
+
+      await price.save();
+
+      res.status(201).json({
+        success: true,
+        data: price,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProfitsPrice = async (req, res, next) => {
+  const { email, passToken } = req.body;
+  try {
+    const user = await User.findOne({ email });
+
+    //checking if the email exists
+    if (!user) {
+      return next(new ErrorResponse("Email Invalid", 401));
+    }
+    //checking if the passToken and email exists
+    if (user.passToken != passToken) {
+      return next(new ErrorResponse("Email/Token Invalid", 401));
+    }
+
+    const price = await Profits.find({
+      user: user.id,
+    });
+
+    const emptyPrice = {
+      pitchTwo: 0,
+      pitchTwoFive: 0,
+      pitchThree: 0,
+      pitchFour: 0,
+      pitchFive: 0,
+      pitchSix: 0,
+      pitchSeven: 0,
+      pitchEight: 0,
+      pitchNine: 0,
+      pitchTen: 0,
+      pitchEleven: 0,
+      pitchTwelve: 0,
+      pitchThirteen: 0,
+      pitchFourteen: 0,
+      pitchFifteen: 0,
+      pitchSixteen: 0,
+      pitchSeventeen: 0,
+      pitchEighteen: 0,
+    };
+    let t = [];
+    t.push(emptyPrice);
+    if (price.length === 0) {
+      console.log("ITS ALL zERO");
+      res.status(201).json({
+        success: true,
+        data: t,
+      });
+    } else {
+      res.status(201).json({
+        success: true,
+        data: price,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateProfitsPrice = async (req, res, next) => {
+  const { pricesData, email, passToken } = req.body;
+
+  let pitchTwo = setData(pricesData.pitchTwo);
+  let pitchTwoFive = setData(pricesData.pitchTwoFive);
+  let pitchThree = setData(pricesData.pitchThree);
+  let pitchFour = setData(pricesData.pitchFour);
+  let pitchFive = setData(pricesData.pitchFive);
+  let pitchSix = setData(pricesData.pitchSix);
+  let pitchSeven = setData(pricesData.pitchSeven);
+  let pitchEight = setData(pricesData.pitchEight);
+  let pitchNine = setData(pricesData.pitchNine);
+  let pitchTen = setData(pricesData.pitchTen);
+  let pitchEleven = setData(pricesData.pitchEleven);
+  let pitchTwelve = setData(pricesData.pitchTwelve);
+  let pitchThirteen = setData(pricesData.pitchThirteen);
+  let pitchFourteen = setData(pricesData.pitchFourteen);
+  let pitchFifteen = setData(pricesData.pitchFifteen);
+  let pitchSixteen = setData(pricesData.pitchSixteen);
+  let pitchSeventeen = setData(pricesData.pitchSeventeen);
+  let pitchEighteen = setData(pricesData.pitchEighteen);
+
+  try {
+    const user = await User.findOne({ email });
+
+    //checking if the email exists
+    if (!user) {
+      return next(new ErrorResponse("Email Invalid", 401));
+    }
+    //checking if the email exists
+    if (user.passToken != passToken) {
+      return next(new ErrorResponse("PassToken Invalid", 401));
+    }
+
+    const findPrice = await Profits.find({ user: user.id });
+
+    //validation
+    if (findPrice.length == 1) {
+      const uPrice = await Profits.findByIdAndUpdate(findPrice);
+      (uPrice.pitchTwo = pitchTwo),
+        (uPrice.pitchTwoFive = pitchTwoFive),
+        (uPrice.pitchThree = pitchThree),
+        (uPrice.pitchFour = pitchFour),
+        (uPrice.pitchFive = pitchFive),
+        (uPrice.pitchSix = pitchSix),
+        (uPrice.pitchSeven = pitchSeven),
+        (uPrice.pitchEight = pitchEight),
+        (uPrice.pitchNine = pitchNine),
+        (uPrice.pitchTen = pitchTen),
+        (uPrice.pitchEleven = pitchEleven),
+        (uPrice.pitchTwelve = pitchTwelve),
+        (uPrice.pitchThirteen = pitchThirteen),
+        (uPrice.pitchFourteen = pitchFourteen),
+        (uPrice.pitchFifteen = pitchFifteen),
+        (uPrice.pitchSixteen = pitchSixteen),
+        (uPrice.pitchSeventeen = pitchSeventeen),
+        (uPrice.pitchEighteen = pitchEighteen),
+        uPrice.save();
+
+      res.status(201).json({
+        success: "Price Updated",
+        data: uPrice,
+      });
+    } else {
+      const price = await Profits.create({
+        pitchTwo: pitchTwo,
+        pitchTwoFive: pitchTwoFive,
+        pitchThree: pitchThree,
+        pitchFour: pitchFour,
+        pitchFive: pitchFive,
+        pitchSix: pitchSix,
+        pitchSeven: pitchSeven,
+        pitchEight: pitchEight,
+        pitchNine: pitchNine,
+        pitchTen: pitchTen,
+        pitchEleven: pitchEleven,
+        pitchTwelve: pitchTwelve,
+        pitchThirteen: pitchThirteen,
+        pitchFourteen: pitchFourteen,
+        pitchFifteen: pitchFifteen,
+        pitchSixteen: pitchSixteen,
+        pitchSeventeen: pitchSeventeen,
+        pitchEighteen: pitchEighteen,
         user: user.id,
       });
 
