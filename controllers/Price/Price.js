@@ -39,7 +39,6 @@ exports.getMaterialsPrice = async (req, res, next) => {
     let t = [];
     t.push(emptyPrice);
     if (price.length === 0) {
-      console.log("ITS ALL zERO");
       res.status(201).json({
         success: true,
         data: t,
@@ -50,11 +49,6 @@ exports.getMaterialsPrice = async (req, res, next) => {
         data: price,
       });
     }
-    /*
-    res.status(201).json({
-      success: true,
-      data: price,
-    });*/
   } catch (error) {
     next(error);
   }
@@ -172,7 +166,6 @@ exports.getLaboursPrice = async (req, res, next) => {
     let t = [];
     t.push(emptyPrice);
     if (price.length === 0) {
-      console.log("ITS ALL zERO");
       res.status(201).json({
         success: true,
         data: t,
@@ -300,7 +293,6 @@ exports.getProfitsPrice = async (req, res, next) => {
     let t = [];
     t.push(emptyPrice);
     if (price.length === 0) {
-      console.log("ITS ALL zERO");
       res.status(201).json({
         success: true,
         data: t,
